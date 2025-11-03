@@ -72,6 +72,30 @@ ethernet_interfaces:
   peer: s1-leaf4
   peer_interface: Ethernet3
   peer_type: l2leaf
+- name: Ethernet7
+  description: P2P_WANCORE_Ethernet2
+  shutdown: false
+  mtu: 1500
+  ip_address: 10.0.0.31/31
+  ospf_network_point_to_point: true
+  ospf_area: 0.0.0.0
+  peer: WANCORE
+  peer_interface: Ethernet2
+  peer_type: other
+  switchport:
+    enabled: false
+- name: Ethernet8
+  description: P2P_WANCORE_Ethernet2
+  shutdown: false
+  mtu: 1500
+  ip_address: 10.0.0.35/31
+  ospf_network_point_to_point: true
+  ospf_area: 0.0.0.0
+  peer: WANCORE
+  peer_interface: Ethernet2
+  peer_type: other
+  switchport:
+    enabled: false
 hostname: s1-spine2
 ip_domain_lookup:
   source_interfaces:
@@ -88,8 +112,6 @@ local_users:
   privilege: 15
   role: network-admin
   sha512_password: $6$arista$zDZ/ZPxTTXRNh/DhTA8ShhpifcDEwOcCz1QFDky5qjvOdwFpEnb0mt92pfgrf3BRBfm1x39Jm/OSOU5Zvg6OI1
-  ssh_key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDyOX2fQBkvQTSOQVyX74mqL4Pca0lR6gANYyoGgFQrE+5HJ1S5pPpV+qV+jcqVTZBCuIeC97t2WRDLcV5ce6I175LLFnP1e9RHf0g2hl2xi7fVNrhRmtXNHr9joHEiGEFyT4Sgzw5IZ24M6YjOYOf5kMwgj1gSv30XGGwWUtGDyp3auvBZZTJjOhPkyU5J6YmI1rf97UlARdCXPh3e4Zx/RchCWjWxWq+uW4gKJdypiS+NkdjT+2xzTDBds/Wljz5I6IXcqw5mTU4VBW+avBcGvcN9BSkw5DvYUcrXcFFJ/d/hpoacJUc9GDLih5DuNAkpFusJmFRF9brsMkHbZXVz
-    arista@review-ci-pr-1-be035996-eos
 loopback_interfaces:
 - name: Loopback0
   description: ROUTER_ID
@@ -164,6 +186,8 @@ router_ospf:
     bfd_enable: false
     no_passive_interfaces:
     - Vlan4093
+    - Ethernet7
+    - Ethernet8
     max_lsa: 12000
     redistribute:
       connected:
@@ -212,15 +236,6 @@ vlan_interfaces:
   tenant: MY_FABRIC
   tags:
   - App
-- name: Vlan25
-  description: Twenty-five
-  shutdown: false
-  ip_address: 10.25.25.3/24
-  ip_virtual_router_addresses:
-  - 10.25.25.1
-  tenant: MY_FABRIC
-  tags:
-  - Wifi
 vlan_internal_order:
   allocation: ascending
   range:
@@ -242,9 +257,6 @@ vlans:
   tenant: MY_FABRIC
 - id: 20
   name: Twenty
-  tenant: MY_FABRIC
-- id: 25
-  name: Twenty-five
   tenant: MY_FABRIC
 vrfs:
 - name: default
